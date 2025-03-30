@@ -113,19 +113,21 @@ export const logout = async (req, res) => {
 }
 export const updateProfile = async (req, res) => {
     try {
-        const { fullname, email, phoneNumber, bio, skills } = req.body;
+        const {
+            fullname, email, phoneNumber, bio, skills, dob, address,
+            experience, educationLevel, institution, yearOfPassout, cgpa,
+            technicalSkills, certifications, honours, minors
+        } = req.body;
         
-        const file = req.file;
-        // cloudinary ayega idhar
-        const fileUri = getDataUri(file);
-        const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
+        
+        
+        
 
+        let skillsArray = skills ? skills.split(",") : [];
+        let technicalSkillsArray = technicalSkills ? technicalSkills.split(",") : [];
+        let certificationsArray = certifications ? certifications.split(",") : [];
+        let experienceArray = experience ? JSON.parse(experience) : [];
 
-
-        let skillsArray;
-        if(skills){
-            skillsArray = skills.split(",");
-        }
         const userId = req.id; // middleware authentication
         let user = await User.findById(userId);
 
@@ -133,21 +135,50 @@ export const updateProfile = async (req, res) => {
             return res.status(400).json({
                 message: "User not found.",
                 success: false
-            })
-        }
-        // updating data
-        if(fullname) user.fullname = fullname
-        if(email) user.email = email
-        if(phoneNumber)  user.phoneNumber = phoneNumber
-        if(bio) user.profile.bio = bio
-        if(skills) user.profile.skills = skillsArray
-      
-        // resume comes later here...
-        if(cloudResponse){
-            user.profile.resume = cloudResponse.secure_url // save the cloudinary url
-            user.profile.resumeOriginalName = file.originalname // Save the original file name
+            });
         }
 
+        // Updating user fields
+        if (fullname) user.fullname = fullname;
+        if (email) user.email = email;
+        if (phoneNumber) user.phoneNumber = phoneNumber;
+        if (dob) user.profile.dob = dob;
+        if (address) user.profile.address = address;
+        
+        if (technicalSkills) user.profile.technicalSkills = technicalSkillsArray;
+        if (certifications) user.profile.certifications = certificationsArray;
+        if (honours) user.profile.honours = honours;
+        if (minors) user.profile.minors = minors;
+
+        if (!Array.isArray(experienceArray)) {
+            try {
+                experienceArray = JSON.parse(req.body.experience);
+                if (!Array.isArray(experienceArray)) {
+                    throw new Error("Parsed experience is not an array");
+                }
+            } catch (error) {
+                console.log("Error parsing experience:", error);
+                experienceArray = []; // Default to empty array
+            }
+        }
+        
+        console.log("Final experience array:", experienceArray);
+        
+        const processedExperience = experienceArray.map(exp => ({
+            company: exp.company || "",
+            role: exp.role || "",
+            duration: exp.duration || ""
+        }));
+        
+
+        // Updating education
+        if (educationLevel) user.profile.education.level = educationLevel;
+        if (institution) user.profile.education.institution = institution;
+        if (yearOfPassout) user.profile.education.yearOfPassout = yearOfPassout;
+        if (cgpa) user.profile.education.cgpa = cgpa;
+
+        // Resume Upload
+        
 
         await user.save();
 
@@ -158,14 +189,16 @@ export const updateProfile = async (req, res) => {
             phoneNumber: user.phoneNumber,
             role: user.role,
             profile: user.profile
-        }
+        };
 
         return res.status(200).json({
-            message:"Profile updated successfully.",
+            message: "Profile updated successfully.",
             user,
-            success:true
-        })
+            success: true
+        });
+
     } catch (error) {
-        console.log(error);
+        console.error(error);
+        return res.status(500).json({ message: "Internal Server Error", success: false });
     }
-}
+};

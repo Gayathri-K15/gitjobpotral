@@ -29,14 +29,14 @@ const ApplicantsTable = () => {
     return (
         <div>
             <Table>
-                <TableCaption>A list of your recent applied user</TableCaption>
+                <TableCaption>A list of your recent applied users</TableCaption>
                 <TableHeader>
                     <TableRow>
-                        <TableHead>FullName</TableHead>
+                        <TableHead>Full Name</TableHead>
                         <TableHead>Email</TableHead>
-                        <TableHead>Contact</TableHead>
-                        <TableHead>Resume</TableHead>
-                        <TableHead>Date</TableHead>
+                        <TableHead>Technical Skills</TableHead>
+                        <TableHead>Education Level</TableHead>
+                        <TableHead>Year of Passout</TableHead>
                         <TableHead className="text-right">Action</TableHead>
                     </TableRow>
                 </TableHeader>
@@ -46,13 +46,9 @@ const ApplicantsTable = () => {
                             <tr key={item._id}>
                                 <TableCell>{item?.applicant?.fullname}</TableCell>
                                 <TableCell>{item?.applicant?.email}</TableCell>
-                                <TableCell>{item?.applicant?.phoneNumber}</TableCell>
-                                <TableCell >
-                                    {
-                                        item.applicant?.profile?.resume ? <a className="text-blue-600 cursor-pointer" href={item?.applicant?.profile?.resume} target="_blank" rel="noopener noreferrer">{item?.applicant?.profile?.resumeOriginalName}</a> : <span>NA</span>
-                                    }
-                                </TableCell>
-                                <TableCell>{item?.applicant.createdAt.split("T")[0]}</TableCell>
+                                <TableCell>{item?.applicant?.profile?.technicalSkills?.join(", ") || "NA"}</TableCell>
+                                <TableCell>{item?.applicant?.profile?.educationLevel || "NA"}</TableCell>
+                                <TableCell>{item?.applicant?.profile?.yearOfPassout || "NA"}</TableCell>
                                 <TableCell className="float-right cursor-pointer">
                                     <Popover>
                                         <PopoverTrigger>
@@ -70,18 +66,14 @@ const ApplicantsTable = () => {
                                             }
                                         </PopoverContent>
                                     </Popover>
-
                                 </TableCell>
-
                             </tr>
                         ))
                     }
-
                 </TableBody>
-
             </Table>
         </div>
     )
 }
 
-export default ApplicantsTable
+export default ApplicantsTable;

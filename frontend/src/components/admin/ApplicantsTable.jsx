@@ -34,21 +34,21 @@ const ApplicantsTable = () => {
                     <TableRow>
                         <TableHead>Full Name</TableHead>
                         <TableHead>Email</TableHead>
+                        <TableHead>DOB</TableHead>
                         <TableHead>Technical Skills</TableHead>
-                        <TableHead>Education Level</TableHead>
-                        <TableHead>Year of Passout</TableHead>
+                        <TableHead>Certifications</TableHead>
                         <TableHead className="text-right">Action</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {
                         applicants && applicants?.applications?.map((item) => (
-                            <tr key={item._id}>
-                                <TableCell>{item?.applicant?.fullname}</TableCell>
-                                <TableCell>{item?.applicant?.email}</TableCell>
+                            <TableRow key={item._id}>
+                                <TableCell>{item?.applicant?.fullname || "NA"}</TableCell>
+                                <TableCell>{item?.applicant?.email || "NA"}</TableCell>
+                                <TableCell>{item?.applicant?.profile?.dob || "NA"}</TableCell>
                                 <TableCell>{item?.applicant?.profile?.technicalSkills?.join(", ") || "NA"}</TableCell>
-                                <TableCell>{item?.applicant?.profile?.educationLevel || "NA"}</TableCell>
-                                <TableCell>{item?.applicant?.profile?.yearOfPassout || "NA"}</TableCell>
+                                <TableCell>{item?.applicant?.profile?.certifications?.join(", ") || "NA"}</TableCell>
                                 <TableCell className="float-right cursor-pointer">
                                     <Popover>
                                         <PopoverTrigger>
@@ -67,7 +67,7 @@ const ApplicantsTable = () => {
                                         </PopoverContent>
                                     </Popover>
                                 </TableCell>
-                            </tr>
+                            </TableRow>
                         ))
                     }
                 </TableBody>

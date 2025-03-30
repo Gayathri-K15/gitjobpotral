@@ -47,14 +47,14 @@ const Profile = () => {
                     </div>
                     <div className='flex items-center gap-3 my-2'>
                         <Calendar />
-                        <span>{user?.profile?.dob || "NA"}</span>
+                        <span>{user?.profile?.dob }</span>
                     </div>
                 </div>
 
                 {/* Address */}
                 <div className='my-5'>
                     <h1 className='font-bold text-lg'>Address</h1>
-                    <p>{user?.profile?.address || "NA"}</p>
+                    <p>{user?.profile?.address }</p>
                 </div>
 
                 {/* Experience */}
@@ -77,7 +77,7 @@ const Profile = () => {
                     <p><strong>Level:</strong> {user?.profile?.educationLevel || "NA"}</p>
                     <p><strong>Institution:</strong> {user?.profile?.institution || "NA"}</p>
                     <p><strong>Year of Passout:</strong> {user?.profile?.yearOfPassout || "NA"}</p>
-                    <p><strong>CGPA:</strong> {user?.profile?.cgpa || "NA"}</p>
+                    <p><strong>CGPA:</strong> {user?.profile?.cgpa }</p>
                 </div>
 
                 {/* Skills */}
@@ -103,17 +103,12 @@ const Profile = () => {
                 {/* Honours & Minors */}
                 <div className='my-5'>
                     <h1 className='font-bold text-lg'>Honours & Minors</h1>
-                    <p><strong>Honours:</strong> {user?.profile?.honours || "NA"}</p>
-                    <p><strong>Minors:</strong> {user?.profile?.minors || "NA"}</p>
+                    <p><strong>Honours:</strong> {user?.profile?.honours }</p>
+                    <p><strong>Minors:</strong> {user?.profile?.minors }</p>
                 </div>
 
                 {/* Resume Upload */}
-                <div className='grid w-full max-w-sm items-center gap-1.5'>
-                    <Label className="text-md font-bold">Resume</Label>
-                    {isResume
-                        ? <a target='blank' href={user?.profile?.resume} className='text-blue-500 w-full hover:underline cursor-pointer'>{user?.profile?.resumeOriginalName}</a>
-                        : <span>NA</span>}
-                </div>
+                
             </div>
 
             {/* Applied Jobs */}
